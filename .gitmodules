@@ -1,6 +1,6 @@
-[submodule "LabEngSoft2-Soph"]
-	path = LabEngSoft2-Soph
-	url = https://github.com/asakuraLie/LabEngSoft2-Soph.git
 [submodule "LabEngSoft2-PersonalTrainer"]
 	path = LabEngSoft2-PersonalTrainer
 	url = https://github.com/lucas-pvg/LabEngSoft2-PersonalTrainer
+[submodule "LabEngSoft2-Nutritionist"]
+	path = LabEngSoft2-Nutritionist
+	url = https://github.com/asakuraLie/LabEngSoft2-Nutritionist.git
