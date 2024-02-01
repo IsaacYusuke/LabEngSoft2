@@ -4,3 +4,6 @@
 [submodule "LabEngSoft2-Nutritionist"]
 	path = LabEngSoft2-Nutritionist
 	url = https://github.com/asakuraLie/LabEngSoft2-Nutritionist.git
+[submodule "LabEngSoft2-Psychologist"]
+	path = LabEngSoft2-Psychologist
+	url = https://github.com/IsaacYusuke/LabEngSoft2-Psychologist
