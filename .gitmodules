@@ -7,3 +7,6 @@
 [submodule "LabEngSoft2-Psychologist"]
 	path = LabEngSoft2-Psychologist
 	url = https://github.com/IsaacYusuke/LabEngSoft2-Psychologist
+[submodule "LabEngSoft2-Patient"]
+	path = LabEngSoft2-Patient
+	url = https://github.com/pedrohrodrig/LabEngSoft2-Patient.git
