@@ -10,3 +10,6 @@
 [submodule "LabEngSoft2-Patient"]
 	path = LabEngSoft2-Patient
 	url = https://github.com/pedrohrodrig/LabEngSoft2-Patient.git
+[submodule "LabEngSoft2-Doctor"]
+	path = LabEngSoft2-Doctor
+	url = https://github.com/pedrohrodrig/LabEngSoft2-Doctor.git
