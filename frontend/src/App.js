@@ -1,9 +1,16 @@
-import ReactDOM from "react-dom/client";
 import { Outlet } from "react-router-dom";
+import Navbar from "./components/navbar/navbar";
+
+import "./App.css";
 
 function App() {
     return (
-        <Outlet />
+        <div className="app">
+            <Navbar />
+            <div className="app-content">
+                <Outlet />
+            </div>
+        </div>
     );
 }
 
