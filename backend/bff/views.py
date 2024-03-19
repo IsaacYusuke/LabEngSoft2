@@ -19,3 +19,26 @@ class LoginView(ModelViewSet):
         # Colocar aqui processamento especifico da View
 
         return Response(data=None, status=status.HTTP_200_OK)
+
+
+class PatientView(ModelViewSet):
+    patient_service = None
+
+    def list(self, request):
+        response = self.patient_service.list_patients(request, request.query_params)
+
+        return Response(response.data, status=status.HTTP_200_OK)
+
+    def retrieve(self, request, pk):
+        response = self.patient_service.get_patient(request, pk)
+
+        return Response(response.data, status=status.HTTP_200_OK)
+
+    def create(self, request):
+        serializer = PatientCreateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        response = self.patient_service.create_patient(request, serializer.validated_data)
+
+        return Response(response, status=status.HTTP_201_CREATED)
