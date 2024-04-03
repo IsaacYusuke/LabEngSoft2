@@ -70,8 +70,23 @@ class PatientService(BaseService):
 
     def create_patient(self, request):
         response = self._post_response(
-            self.url,
+            self.patient_url,
             request.data,
         )
+
+        return response
+
+    def list_appointments_from_user(self, request):
+        response = self._get_response(self.appointment_url)
+
+        return response
+
+    def get_appointment_from_id(self, request, pk):
+        response = self._get_response(f"{self.appointment_url}{pk}")
+
+        return response
+
+    def create_appointment(self, request, data):
+        response = self._post_response(self.appointment_url, data)
 
         return response
