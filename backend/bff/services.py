@@ -47,15 +47,23 @@ class PatientService(BaseService):
 
     def __init__(self):
         self._import_settings()
+        self.patient_url = self.url + "/patient/"
+        self.patient_from_logged_user = self.url + "/patient_from_logged_user/"
+        self.appointment_url = self.url + "/appointment/"
 
     def list_patients(self, request, params=None):
-        response = self._get_response(self.url, params=params)
+        response = self._get_response(self.patient_url, params=params)
 
         return response
 
-    def get_patient(self, request, pk):
+    def get_patient_from_logged_user(self, request):
+        response = self._get_response(self.patient_from_logged_user)
+
+        return response
+
+    def get_patient_by_user_id(self, request, pk):
         response = self._get_response(
-            f"{self.url}{pk}",
+            f"{self.patient_url}{pk}",
         )
 
         return response
