@@ -6,9 +6,13 @@ name = "pypi"
 [packages]
 django = "*"
 djangorestframework = "*"
+requests = "*"
+psycopg2-binary = "*"
+psycopg-binary = "*"
+djangorestframework-simplejwt = "*"
 
 [dev-packages]
-pre-commit = "2.17.x"
+pre-commit = "2.17.0"
 black = "~=22.6"
 isort = "~=5.10"
 

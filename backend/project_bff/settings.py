@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -76,8 +77,12 @@ WSGI_APPLICATION = "project_bff.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": os.environ["DB_ENGINE"],
+        "NAME": os.environ["DB_NAME"],
+        "USER": os.environ["DB_USER"],
+        "PASSWORD": os.environ["DB_PASSWORD"],
+        "HOST": os.environ["DB_HOST"],
+        "PORT": os.environ["DB_PORT"],
     }
 }
 
@@ -125,10 +130,13 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Service URLs
 
-PATIENT_SERVICE_URL = "http://host.docker.internal:8001"
-
 CUSTOM_AUTHENTICATION_SETTINGS = {
     "AUTHENTICATION_ACCESS_COOKIE_NAME": "access_token",
     "AUTH_TOKEN_CLASS": "rest_framework_simplejwt.tokens.AccessToken",
     "REFRESH_TOKEN_CLASS": "rest_framework_simplejwt.tokens.RefreshToken",
 }
+
+# Services URLs
+
+AUTHENTICATION_SERVICE_URL = os.environ["AUTHENTICATION_SERVICE_URL"]
+PATIENT_SERVICE_URL = os.environ["PATIENT_SERVICE_URL"]

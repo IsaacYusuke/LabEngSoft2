@@ -9,7 +9,7 @@ urlpatterns = [
         TokenRefreshView.as_view(actions={"get": "get"}, authentication_service=AuthenticationService()),
     ),
     path("login/", LoginView.as_view(actions={"post": "post"}, authentication_service=AuthenticationService())),
-    path("logout/", LogoutView.as_view(actions={"post": "post"}, authentication_service=AuthenticationService())),
+    path("logout/", LogoutView.as_view(actions={"post": "post"})),
     path(
         "register/",
         UserView.as_view(
