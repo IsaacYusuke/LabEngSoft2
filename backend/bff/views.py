@@ -2,28 +2,127 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from rest_framework_simplejwt.tokens import RefreshToken
 
+from .models import Roles
 from .serializers import LoginSerializer
-from .services import PatientService
+from .services import AuthenticationService, PatientService
+
+
+class TokenRefreshView(ModelViewSet):
+    permission_classes = [AllowAny]
+    authentication_service: AuthenticationService = None
+
+    def get(self, request):
+        refresh_token = request.COOKIES.get("refresh_token")
+
+        if not refresh_token:
+            return Response(status=status.HTTP_304_NOT_MODIFIED)
+
+        access = self.authentication_service.refresh(refresh_token)
+        access_expiration = self.authentication_service.get_token_utc_expiration(access)
+        response = Response(status=status.HTTP_200_OK)
+        response.set_cookie(
+            "access_token",
+            access.token,
+            expires=access_expiration,
+            httponly=True,
+        )
+        return response
 
 
 class LoginView(ModelViewSet):
     permission_classes = [AllowAny]
+    authentication_service: AuthenticationService = None
 
-    # Nome da funcao pode mudar, so precisa alterar no arquivo urls.py
     def post(self, request):
         serialized_data = LoginSerializer(data=request.data)
-
         if not serialized_data.is_valid():
             return Response(serialized_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        # Colocar aqui processamento especifico da View
+        auth_response = self.authentication_service.access(serialized_data.validated_data)
 
-        return Response(data=None, status=status.HTTP_200_OK)
+        response = self.authentication_service.set_authentication_cookies(
+            Response(status=status.HTTP_200_OK), auth_response
+        )
+
+        return response
+
+
+class LogoutView(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            refresh_token = request.data["refresh_token"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserView(ModelViewSet):
+    authentication_service: AuthenticationService = None
+    patient_service: PatientService = None
+
+    def _register_in_authentication_service(self, request_data):
+        data = {
+            "email": request_data.get("email"),
+            "first_name": request_data.get("first_name"),
+            "last_name": request_data.get("last_name"),
+            "role": request_data.get("role"),
+        }
+
+        response = self.authentication_service.register(data)
+
+        return response
+
+    def register(self, request):
+        authentication_service_response = self._register_in_authentication_service(request.data)
+        if not status.is_success(authentication_service_response.status_code):
+            return authentication_service_response
+
+        user_role = request.data.get("role")
+
+        if user_role == Roles.PATIENT:
+            user = authentication_service_response.data
+            data = {
+                "id_user": user.id,
+                "first_name": request.data.get("first_name"),
+                "last_name": request.data.get("last_name"),
+                "birth_date": request.data.get("birth_date"),
+                "email": request.data.get("email"),
+                "phone_number": request.data.get("phone_number"),
+                "cpf": request.data.get("cpf"),
+                "address": request.data.get("address"),
+                "gender": request.data.get("gender"),
+            }
+
+            response = self.patient_service.create_patient(request, data)
+
+            return Response(response.data, status=status.HTTP_201_CREATED)
+
+    def list(self, request):
+        response = self.authentication_service.list(request, params=request.query_params)
+
+        return Response(response.data, status=status.HTTP_200_OK)
+
+    def retrieve_self(self, request):
+        response = self.authentication_service.retrieve_self(request)
+
+        return Response(response.data, status=status.HTTP_200_OK)
+
+    def retrieve_basic_info_by_id(self, request, pk):
+        response = self.authentication_service.retrieve_basic_info_by_id(request, pk)
+
+        return Response(response.data, status=status.HTTP_200_OK)
 
 
 class PatientView(ModelViewSet):
     patient_service: PatientService = None
+    permission_classes = [IsAuthenticated]
 
     def list(self, request):
         response = self.patient_service.list_patients(request, request.query_params)
@@ -52,6 +151,8 @@ class AppointmentView(ModelViewSet):
     personal_trainer_service = None
     psychologist_service = None
     nutritionist_service = None
+
+    permission_classes = [IsAuthenticated]
 
     def retrieve_patient_appointment(self, request, pk):
         patient_service_response = self.patient_service.get_appointment_from_id(request, pk)

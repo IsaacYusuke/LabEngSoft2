@@ -126,3 +126,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Service URLs
 
 PATIENT_SERVICE_URL = "http://host.docker.internal:8001"
+
+CUSTOM_AUTHENTICATION_SETTINGS = {
+    "AUTHENTICATION_ACCESS_COOKIE_NAME": "access_token",
+    "AUTH_TOKEN_CLASS": "rest_framework_simplejwt.tokens.AccessToken",
+    "REFRESH_TOKEN_CLASS": "rest_framework_simplejwt.tokens.RefreshToken",
+}
