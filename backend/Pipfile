@@ -10,6 +10,7 @@ requests = "*"
 psycopg2-binary = "*"
 psycopg-binary = "*"
 djangorestframework-simplejwt = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 pre-commit = "2.17.0"
