@@ -99,7 +99,7 @@ class AuthenticationService(AuthenticatedService):
         return response
 
     def retrieve_basic_info_by_id(self, request, pk):
-        response = self._get_response(f"{self.user_url}{pk}", headers=self.get_auth_header(request=request))
+        response = self._get_response(f"{self.user_url}{pk}/", headers=self.get_auth_header(request=request))
 
         return response
 
