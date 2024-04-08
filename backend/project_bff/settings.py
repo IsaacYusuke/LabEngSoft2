@@ -10,23 +10,29 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
-import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-v=aoyvt2xsi955pg7!hs2jk$0q!fzrbmp=9gg7k@-og1ml!ogz"
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "django-insecure-v=aoyvt2xsi955pg7!hs2jk$0q!fzrbmp=9gg7k@-og1ml!ogz")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = []
+# TODO: alterar para maior segurança
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -38,6 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "whitenoise.runserver_nostatic",
     "corsheaders",
     "rest_framework",
 ]
@@ -51,9 +58,13 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = ["http://localhost:3000"]
+CORS_ORIGIN_REGEX_WHITELIST = ["http://localhost:3000"]
 
 ROOT_URLCONF = "project_bff.urls"
 
@@ -81,12 +92,12 @@ WSGI_APPLICATION = "project_bff.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": os.environ["DB_ENGINE"],
-        "NAME": os.environ["DB_NAME"],
-        "USER": os.environ["DB_USER"],
-        "PASSWORD": os.environ["DB_PASSWORD"],
-        "HOST": os.environ["DB_HOST"],
-        "PORT": os.environ["DB_PORT"],
+        "ENGINE": os.getenv("DB_ENGINE", "django.db.backends.sqlite3"),
+        "NAME": os.getenv("DB_NAME", "/var/www/mysite/sqlite.db"),
+        "USER": os.getenv("DB_USER", ""),
+        "PASSWORD": os.getenv("DB_PASSWORD", ""),
+        "HOST": os.getenv("DB_HOST", ""),
+        "PORT": os.getenv("DB_PORT", ""),
     }
 }
 
@@ -142,5 +153,5 @@ CUSTOM_AUTHENTICATION_SETTINGS = {
 
 # Services URLs
 
-AUTHENTICATION_SERVICE_URL = os.environ["AUTHENTICATION_SERVICE_URL"]
-PATIENT_SERVICE_URL = os.environ["PATIENT_SERVICE_URL"]
+AUTHENTICATION_SERVICE_URL = os.getenv("AUTHENTICATION_SERVICE_URL")
+PATIENT_SERVICE_URL = os.getenv("PATIENT_SERVICE_URL")
