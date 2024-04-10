@@ -196,3 +196,8 @@ class AppointmentView(ModelViewSet):
             return Response(patient_service_response.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return Response(status=status.HTTP_201_CREATED)
+
+    def list_appointments_from_professional_id(self, request, id_user_professional):
+        response = self.patient_service.list_appointments_from_professional_id(request, id_user_professional)
+
+        return Response(response.data, status=status.HTTP_200_OK)

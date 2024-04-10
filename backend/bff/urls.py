@@ -54,4 +54,10 @@ urlpatterns = [
         "patient/appointments/<int:pk>/",
         AppointmentView.as_view(actions={"get": "retrieve_patient_appointment"}, patient_service=PatientService()),
     ),
+    path(
+        "patient/appointment_from_professional_id/<int:id_user_professional>/",
+        AppointmentView.as_view(
+            actions={"get": "list_appointments_from_professional_id"}, patient_service=PatientService()
+        ),
+    ),
 ]

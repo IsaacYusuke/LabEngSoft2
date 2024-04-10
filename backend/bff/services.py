@@ -146,6 +146,7 @@ class PatientService(AuthenticatedService):
         self.patient_url = self.url + "/patient/"
         self.patient_from_logged_user = self.url + "/patient_from_logged_user/"
         self.appointment_url = self.url + "/appointment/"
+        self.appointment_from_professional_id = self.url + "/appointment_from_professional_id/"
 
     def list_patients(self, request, params=None):
         response = self._get_response(self.patient_url, params=params, headers=self.get_auth_header(request=request))
@@ -185,6 +186,14 @@ class PatientService(AuthenticatedService):
     def cancel_appointment(self, request, pk):
         response = self._patch_response(
             f"{self.appointment_url}{pk}/cancel/", headers=self.get_auth_header(request=request)
+        )
+
+        return response
+
+    def list_appointments_from_professional_id(self, request, id_user_professional):
+        response = self._get_response(
+            f"{self.appointment_from_professional_id}{id_user_professional}/",
+            headers=self.get_auth_header(request=request),
         )
 
         return response
