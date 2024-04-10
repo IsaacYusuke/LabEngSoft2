@@ -63,8 +63,8 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_WHITELIST = ["http://localhost:3000"]
-CORS_ORIGIN_REGEX_WHITELIST = ["http://localhost:3000"]
+CORS_ORIGIN_WHITELIST = ["http://localhost:3000", "https://master.d2yta5qg27ob87.amplifyapp.com/"]
+CORS_ORIGIN_REGEX_WHITELIST = ["http://localhost:3000", "https://master.d2yta5qg27ob87.amplifyapp.com/"]
 
 ROOT_URLCONF = "project_bff.urls"
 
@@ -151,7 +151,18 @@ CUSTOM_AUTHENTICATION_SETTINGS = {
     "REFRESH_TOKEN_CLASS": "rest_framework_simplejwt.tokens.RefreshToken",
 }
 
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTTokenUserAuthentication",),
+}
+
+SIMPLE_JWT = {"SIGNING_KEY": os.getenv("SIGNING_KEY", "oc61xp)1pd#r5%%1a%_+nh2mo!rxd!iv(wc7-91*vs6t4oa#t%")}
+
 # Services URLs
 
-AUTHENTICATION_SERVICE_URL = os.getenv("AUTHENTICATION_SERVICE_URL")
-PATIENT_SERVICE_URL = os.getenv("PATIENT_SERVICE_URL")
+AUTHENTICATION_SERVICE_URL = os.getenv(
+    "AUTHENTICATION_SERVICE_URL", "http://ec2-15-229-111-219.sa-east-1.compute.amazonaws.com"
+)
+PATIENT_SERVICE_URL = os.getenv("PATIENT_SERVICE_URL", "http://ec2-18-231-195-103.sa-east-1.compute.amazonaws.com")
