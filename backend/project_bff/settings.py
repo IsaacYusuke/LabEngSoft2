@@ -63,8 +63,8 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_WHITELIST = ["http://localhost:3000", "https://master.d2yta5qg27ob87.amplifyapp.com/"]
-CORS_ORIGIN_REGEX_WHITELIST = ["http://localhost:3000", "https://master.d2yta5qg27ob87.amplifyapp.com/"]
+CORS_ORIGIN_WHITELIST = ["http://localhost:3000", "https://master.d2yta5qg27ob87.amplifyapp.com"]
+CORS_ORIGIN_REGEX_WHITELIST = ["http://localhost:3000", "https://master.d2yta5qg27ob87.amplifyapp.com"]
 
 ROOT_URLCONF = "project_bff.urls"
 
@@ -93,11 +93,7 @@ WSGI_APPLICATION = "project_bff.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": os.getenv("DB_ENGINE", "django.db.backends.sqlite3"),
-        "NAME": os.getenv("DB_NAME", "/var/www/mysite/sqlite.db"),
-        "USER": os.getenv("DB_USER", ""),
-        "PASSWORD": os.getenv("DB_PASSWORD", ""),
-        "HOST": os.getenv("DB_HOST", ""),
-        "PORT": os.getenv("DB_PORT", ""),
+        "NAME": os.getenv("DB_NAME", ":memory:"),
     }
 }
 
@@ -152,10 +148,9 @@ CUSTOM_AUTHENTICATION_SETTINGS = {
 }
 
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated",
-    ],
-    "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTTokenUserAuthentication",),
+    "DEFAULT_PERMISSION_CLASSES": [],
+    "DEFAULT_AUTHENTICATION_CLASSES": [],
+    "UNAUTHENTICATED_USER": None,
 }
 
 SIMPLE_JWT = {"SIGNING_KEY": os.getenv("SIGNING_KEY", "oc61xp)1pd#r5%%1a%_+nh2mo!rxd!iv(wc7-91*vs6t4oa#t%")}
