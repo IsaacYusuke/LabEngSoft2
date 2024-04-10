@@ -157,7 +157,5 @@ SIMPLE_JWT = {"SIGNING_KEY": os.getenv("SIGNING_KEY", "oc61xp)1pd#r5%%1a%_+nh2mo
 
 # Services URLs
 
-AUTHENTICATION_SERVICE_URL = os.getenv(
-    "AUTHENTICATION_SERVICE_URL", "http://ec2-15-229-111-219.sa-east-1.compute.amazonaws.com"
-)
-PATIENT_SERVICE_URL = os.getenv("PATIENT_SERVICE_URL", "http://ec2-18-231-195-103.sa-east-1.compute.amazonaws.com")
+AUTHENTICATION_SERVICE_URL = os.getenv("AUTHENTICATION_SERVICE_URL", "http://177.71.201.131")
+PATIENT_SERVICE_URL = os.getenv("PATIENT_SERVICE_URL", "http://54.233.159.159")
