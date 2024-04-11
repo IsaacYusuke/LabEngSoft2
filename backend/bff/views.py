@@ -42,8 +42,10 @@ class LoginView(ModelViewSet):
 
         auth_response = self.authentication_service.access(serialized_data.validated_data)
 
+        response_data = {"access": auth_response.get("access").token, "refresh": auth_response.get("refresh").token}
+
         response = self.authentication_service.set_authentication_cookies(
-            Response(status=status.HTTP_200_OK), auth_response
+            Response(response_data, status=status.HTTP_200_OK), auth_response
         )
 
         return response
