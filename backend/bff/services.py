@@ -63,20 +63,20 @@ class AuthenticationService(AuthenticatedService):
         return self._get_from_raw_token(raw_token, token_type)
 
     def access(self, data):
-        response = self._get_valid_post_response(self.token_url, data)
+        response = self._post_response(self.token_url, data)
 
-        access_token = self._get_from_json(response, self.access_typename)
-        refresh_token = self._get_from_json(response, self.refresh_typename)
+        access_token = self._get_from_json(response, "access")
+        refresh_token = self._get_from_json(response, "refresh")
 
-        tokens = {self.access_typename: access_token, self.refresh_typename: refresh_token}
+        tokens = {"access": access_token, "refresh": refresh_token}
 
         return tokens
 
     def refresh(self, refresh_token):
         data = {"refresh": refresh_token}
 
-        response = self._get_valid_post_response(self.refresh_url, data)
-        access_token = self._get_from_json(response, self.access_typename)
+        response = self._post_response(self.refresh_url, data)
+        access_token = self._get_from_json(response, "access")
 
         return access_token
 
