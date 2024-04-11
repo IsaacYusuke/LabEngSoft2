@@ -52,15 +52,13 @@ class LoginView(ModelViewSet):
 
 
 class LogoutView(ModelViewSet):
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request):
+    def get(self, request):
         try:
-            refresh_token = request.data["refresh_token"]
-            token = RefreshToken(refresh_token)
-            token.blacklist()
+            response = Response(status=status.HTTP_205_RESET_CONTENT)
+            response.delete_cookie("access_token")
+            response.delete_cookie("refresh_token")
 
-            return Response(status=status.HTTP_205_RESET_CONTENT)
+            return response
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
