@@ -73,6 +73,8 @@ class UserView(ModelViewSet):
             "first_name": request_data.get("first_name"),
             "last_name": request_data.get("last_name"),
             "role": request_data.get("role"),
+            "password": request_data.get("password"),
+            "password_confirmation": request_data.get("password_confirmation"),
         }
 
         response = self.authentication_service.register(data)
@@ -81,15 +83,13 @@ class UserView(ModelViewSet):
 
     def register(self, request):
         authentication_service_response = self._register_in_authentication_service(request.data)
-        if not status.is_success(authentication_service_response.status_code):
-            return authentication_service_response
 
         user_role = request.data.get("role")
 
         if user_role == Roles.PATIENT:
-            user = authentication_service_response.data
+            user = authentication_service_response
             data = {
-                "id_user": user.id,
+                "id_user": user["id"],
                 "first_name": request.data.get("first_name"),
                 "last_name": request.data.get("last_name"),
                 "birth_date": request.data.get("birth_date"),
