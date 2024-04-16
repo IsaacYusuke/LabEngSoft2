@@ -21,6 +21,11 @@ class BaseService:
         response = requests.patch(url, data=data, files=files, headers=headers)
 
         return response.json()
+    
+    def _put_response(self, url, data=None, files=None, headers=None):
+        response = requests.put(url, data=data, files=files, headers=headers)
+
+        return response.json()
 
     def _delete_response(self, url, data=None, headers=None):
         response = requests.delete(url, json=data, headers=headers)
@@ -197,3 +202,156 @@ class PatientService(AuthenticatedService):
         )
 
         return response
+
+class NutritionistService(AuthenticatedService):
+    def _import_settings(self):
+        self.url = settings.NUTRITIONIST_SERVICE_URL
+
+    def __init__(self):
+        self._import_settings()
+        self.nutritionist_url = self.url + "/nutritionist/"
+        self.appointment_url = self.url + "/appointment/"
+        self.event_url = self.url + "/event/"
+        self.evaluation_url = self.url + "/evaluation/"
+        self.evaluation_from_patient = self.url + "/evaluation_from_patient/"
+        self.evolution_url = self.url + "/evolution/"
+        self.evolution_from_patient = self.url + "/evolution_from_patient/"
+        self.diet_url = self.url + "/diet/"
+        self.diet_from_patient = self.url + "/diet_from_patient/"
+        
+
+    def create_nutritionist(self, request, data):
+        response = self._post_response(self.nutritionist_url, data, headers=self.get_auth_header(request=request))
+        
+        return response
+    
+    def retrieve_nutritionist(self, request, pk):
+        response = self._get_response(f"{self.nutritionist_url}{pk}", headers=self.get_auth_header(request=request))
+
+        return response
+    
+    def list_all_nutritionist (self, request, params=None):
+        response = self._get_response(self.nutritionist_url, params=params, headers=self.get_auth_header(request=request))
+
+        return response
+    
+    def create_appointment (self, request, data):
+        response = self._post_response(self.appointment_url, data, headers=self.get_auth_header(request=request))
+
+        return response
+    
+    def retrieve_appointment (self, request, pk):
+        response = self._get_response(f"{self.appointment_url}{pk}", headers=self.get_auth_header(request=request))
+
+        return response
+    
+    def list_all_appointment (self, request, params=None):
+        response = self._get_response(self.appointment_url, params=params, headers=self.get_auth_header(request=request))
+
+        return response
+    
+    def create_event (self, request, data):
+        response = self._post_response(self.event_url, data, headers=self.get_auth_header(request=request))
+
+        return response
+    
+    def retrieve_event (self, request, pk):
+        response = self._get_response(f"{self.event_url}{pk}", headers=self.get_auth_header(request=request))
+
+        return response
+    
+    def list_all_event (self, request, params=None):
+        response = self._get_response(self.event_url, params=params, headers=self.get_auth_header(request=request))
+
+        return response
+    
+    def create_evaluation (self, request, data):
+        response = self._post_response(self.evaluation_url, data, headers=self.get_auth_header(request=request))
+
+        return response
+    
+    def update_evaluation(self, request, pk):
+        response = self._put_response(
+            f"{self.evaluation_url}{pk}/edit/", headers=self.get_auth_header(request=request)
+        )
+
+        return response
+    
+    def retrieve_evaluation (self, request, pk):
+        response = self._get_response(f"{self.evaluation_url}{pk}", headers=self.get_auth_header(request=request))
+
+        return response
+    
+    def list_all_evaluation (self, request, params=None):
+        response = self._get_response(self.evaluation_url, params=params, headers=self.get_auth_header(request=request))
+
+        return response
+    
+    def list_evaluation_from_patient_id(self, request, pk):
+        response = self._get_response(
+            f"{self.evaluation_from_patient}{pk}/",
+            headers=self.get_auth_header(request=request),
+        )
+
+        return response
+
+    def create_evolution (self, request, data):
+        response = self._post_response(self.evolution_url, data, headers=self.get_auth_header(request=request))
+
+        return response
+    
+    def update_evolution (self, request, pk):
+        response = self._put_response(
+            f"{self.evolution_url}{pk}/edit/", headers=self.get_auth_header(request=request)
+        )
+
+        return response
+    
+    def retrieve_evolution  (self, request, pk):
+        response = self._get_response(f"{self.evolution_url}{pk}", headers=self.get_auth_header(request=request))
+
+        return response
+    
+    def list_all_evolution (self, request, params=None):
+        response = self._get_response(self.evolution_url, params=params, headers=self.get_auth_header(request=request))
+
+        return response
+    
+    def list_evolution_from_patient_id(self, request, pk):
+        response = self._get_response(
+            f"{self.evolution_from_patient}{pk}/",
+            headers=self.get_auth_header(request=request),
+        )
+
+        return response
+    
+    def create_diet (self, request, data):
+        response = self._post_response(self.diet_url, data, headers=self.get_auth_header(request=request))
+
+        return response
+    
+    def retrieve_diet  (self, request, pk):
+        response = self._get_response(f"{self.diet_url}{pk}", headers=self.get_auth_header(request=request))
+
+        return response
+    
+    def list_all_diet (self, request, params=None):
+        response = self._get_response(self.diet_url, params=params, headers=self.get_auth_header(request=request))
+
+        return response
+    
+    def delete_diet(self, request, pk):
+        response = self._delete_response(f"{self.diet_url}{pk}/delete/", headers=self.get_auth_header(request=request))
+
+        return response
+    
+    def list_diet_from_patient_id(self, request, pk):
+        response = self._get_response(
+            f"{self.diet_from_patient}{pk}/",
+            headers=self.get_auth_header(request=request),
+        )
+
+        return response
+
+    
+
