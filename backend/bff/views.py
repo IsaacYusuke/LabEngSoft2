@@ -144,6 +144,11 @@ class PatientView(ModelViewSet):
 
         return Response(response.data, status=status.HTTP_201_CREATED)
 
+    def list_from_professional_id(self, request, pk):
+        response = self.patient_service.list_patients_from_professional_id(request, pk)
+
+        return Response(response.data, status=status.HTTP_200_OK)
+
 
 class AppointmentView(ModelViewSet):
     patient_service: PatientService = None
