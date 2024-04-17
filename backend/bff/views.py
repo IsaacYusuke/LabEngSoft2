@@ -66,6 +66,10 @@ class LogoutView(ModelViewSet):
 class UserView(ModelViewSet):
     authentication_service: AuthenticationService = None
     patient_service: PatientService = None
+    nutritionist_sevice = None
+    personal_trainer_service = None
+    doctor_service = None
+    psychologist_service = None
 
     def _register_in_authentication_service(self, request_data):
         data = {
@@ -85,9 +89,9 @@ class UserView(ModelViewSet):
         authentication_service_response = self._register_in_authentication_service(request.data)
 
         user_role = request.data.get("role")
+        user = authentication_service_response
 
         if user_role == Roles.PATIENT:
-            user = authentication_service_response
             data = {
                 "id_user": user["id"],
                 "first_name": request.data.get("first_name"),
@@ -98,11 +102,49 @@ class UserView(ModelViewSet):
                 "cpf": request.data.get("cpf"),
                 "address": request.data.get("address"),
                 "gender": request.data.get("gender"),
+                "weight": request.data.get("weight"),
+                "height": request.data.get("height"),
             }
 
             response = self.patient_service.create_patient(request, data)
 
+            return Response(response, status=status.HTTP_201_CREATED)
+
+        data = {
+            "id_user": user["id"],
+            "first_name": request.data.get("first_name"),
+            "last_name": request.data.get("last_name"),
+            "date_of_birth": request.data.get("birth_date"),
+            "email": request.data.get("email"),
+            "phone_number": request.data.get("phone_number"),
+            "cpf": request.data.get("cpf"),
+            "address": request.data.get("address"),
+            "gender": request.data.get("gender"),
+            "price": request.data.get("price"),
+            "bio": request.data.get("bio"),
+        }
+
+        if user_role == Roles.DOCTOR:
+            response = self.doctor_service.create_doctor(request, data)
+
             return Response(response.data, status=status.HTTP_201_CREATED)
+
+        elif user_role == Roles.NUTRITIONIST:
+            response = self.nutritionist_service.create_nutritionist(request, data)
+
+            return Response(response.data, status=status.HTTP_201_CREATED)
+
+        elif user_role == Roles.PERSONAL_TRAINER:
+            response = self.personal_trainer_service.create_personal_trainer(request, data)
+
+            return Response(response.data, status=status.HTTP_201_CREATED)
+
+        elif user_role == Roles.PSYCHOLOGIST:
+            response = self.psychologist_service.create_psychologist(request, data)
+
+            return Response(response.data, status=status.HTTP_201_CREATED)
+
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def list(self, request):
         response = self.authentication_service.list(request, params=request.query_params)
