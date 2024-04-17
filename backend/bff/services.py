@@ -210,15 +210,12 @@ class NutritionistService(AuthenticatedService):
     def __init__(self):
         self._import_settings()
         self.nutritionist_url = self.url + "/nutritionist/"
-        self.appointment_url = self.url + "/appointment/"
-        self.event_url = self.url + "/event/"
         self.evaluation_url = self.url + "/evaluation/"
         self.evaluation_from_patient = self.url + "/evaluation_from_patient/"
         self.evolution_url = self.url + "/evolution/"
         self.evolution_from_patient = self.url + "/evolution_from_patient/"
         self.diet_url = self.url + "/diet/"
         self.diet_from_patient = self.url + "/diet_from_patient/"
-        
 
     def create_nutritionist(self, request, data):
         response = self._post_response(self.nutritionist_url, data, headers=self.get_auth_header(request=request))
@@ -226,7 +223,7 @@ class NutritionistService(AuthenticatedService):
         return response
     
     def retrieve_nutritionist(self, request, pk):
-        response = self._get_response(f"{self.nutritionist_url}{pk}", headers=self.get_auth_header(request=request))
+        response = self._get_response(f"{self.nutritionist_url}{pk}/", headers=self.get_auth_header(request=request))
 
         return response
     
@@ -235,55 +232,23 @@ class NutritionistService(AuthenticatedService):
 
         return response
     
-    def create_appointment (self, request, data):
-        response = self._post_response(self.appointment_url, data, headers=self.get_auth_header(request=request))
-
-        return response
-    
-    def retrieve_appointment (self, request, pk):
-        response = self._get_response(f"{self.appointment_url}{pk}", headers=self.get_auth_header(request=request))
-
-        return response
-    
-    def list_all_appointment (self, request, params=None):
-        response = self._get_response(self.appointment_url, params=params, headers=self.get_auth_header(request=request))
-
-        return response
-    
-    def create_event (self, request, data):
-        response = self._post_response(self.event_url, data, headers=self.get_auth_header(request=request))
-
-        return response
-    
-    def retrieve_event (self, request, pk):
-        response = self._get_response(f"{self.event_url}{pk}", headers=self.get_auth_header(request=request))
-
-        return response
-    
-    def list_all_event (self, request, params=None):
-        response = self._get_response(self.event_url, params=params, headers=self.get_auth_header(request=request))
-
-        return response
-    
     def create_evaluation (self, request, data):
         response = self._post_response(self.evaluation_url, data, headers=self.get_auth_header(request=request))
 
         return response
     
-    def update_evaluation(self, request, pk):
-        response = self._put_response(
-            f"{self.evaluation_url}{pk}/edit/", headers=self.get_auth_header(request=request)
-        )
-
-        return response
-    
-    def retrieve_evaluation (self, request, pk):
-        response = self._get_response(f"{self.evaluation_url}{pk}", headers=self.get_auth_header(request=request))
+    def retrieve_evaluation  (self, request, pk):
+        response = self._get_response(f"{self.evaluation_url}{pk}/", headers=self.get_auth_header(request=request))
 
         return response
     
     def list_all_evaluation (self, request, params=None):
         response = self._get_response(self.evaluation_url, params=params, headers=self.get_auth_header(request=request))
+
+        return response
+    
+    def delete_evaluation(self, request, pk):
+        response = self._delete_response(f"{self.evaluation_url}{pk}/", headers=self.get_auth_header(request=request))
 
         return response
     
@@ -302,13 +267,13 @@ class NutritionistService(AuthenticatedService):
     
     def update_evolution (self, request, pk):
         response = self._put_response(
-            f"{self.evolution_url}{pk}/edit/", headers=self.get_auth_header(request=request)
+            f"{self.evolution_url}{pk}", headers=self.get_auth_header(request=request)
         )
 
         return response
     
     def retrieve_evolution  (self, request, pk):
-        response = self._get_response(f"{self.evolution_url}{pk}", headers=self.get_auth_header(request=request))
+        response = self._get_response(f"{self.evolution_url}{pk}/", headers=self.get_auth_header(request=request))
 
         return response
     
@@ -331,7 +296,7 @@ class NutritionistService(AuthenticatedService):
         return response
     
     def retrieve_diet  (self, request, pk):
-        response = self._get_response(f"{self.diet_url}{pk}", headers=self.get_auth_header(request=request))
+        response = self._get_response(f"{self.diet_url}{pk}/", headers=self.get_auth_header(request=request))
 
         return response
     
@@ -341,7 +306,7 @@ class NutritionistService(AuthenticatedService):
         return response
     
     def delete_diet(self, request, pk):
-        response = self._delete_response(f"{self.diet_url}{pk}/delete/", headers=self.get_auth_header(request=request))
+        response = self._delete_response(f"{self.diet_url}{pk}/", headers=self.get_auth_header(request=request))
 
         return response
     
